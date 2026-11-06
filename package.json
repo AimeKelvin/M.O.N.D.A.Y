@@ -1,0 +1,66 @@
+{
+  "name": "monday-spatial-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Motion-Operated Navigation, Design & Analysis sYstem. A local-first gesture-controlled 3D workspace.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "npm run typecheck && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --max-warnings 0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "npm run test:unit && npm run build && npm run test:e2e",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "assets:tracking": "node scripts/setup-tracking.mjs",
+    "assets:demo": "node scripts/generate-demo.mjs",
+    "postinstall": "node scripts/setup-tracking.mjs",
+    "check": "npm run lint && npm run format:check && npm test",
+    "start": "vite --host 127.0.0.1",
+    "test:unit": "vitest run"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "5.3.0",
+    "@mediapipe/tasks-vision": "1.2.2",
+    "@react-three/drei": "10.7.9",
+    "@react-three/fiber": "9.8.2",
+    "@tailwindcss/vite": "4.3.4",
+    "lucide-react": "1.70.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "tailwindcss": "4.3.4",
+    "three": "0.187.0",
+    "zustand": "5.0.16"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.65.0",
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "14.6.8",
+    "@types/node": "26.6.6",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@types/three": "0.187.0",
+    "@vitejs/plugin-react": "6.2.1",
+    "eslint": "10.14.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "globals": "17.14.0",
+    "jsdom": "29.1.1",
+    "prettier": "3.9.10",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.1",
+    "vite": "8.3.6",
+    "vitest": "5.1.0"
+  },
+  "overrides": {
+    "minimatch": "11.0.1"
+  }
+}

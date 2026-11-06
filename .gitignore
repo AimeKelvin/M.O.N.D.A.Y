@@ -1,0 +1,12 @@
+node_modules/
+dist/
+public/mediapipe/*.wasm
+public/mediapipe/*.js
+public/mediapipe/*.task
+playwright-report/
+test-results/
+coverage/
+.DS_Store
+*.local
+.env*
+.vercel/
