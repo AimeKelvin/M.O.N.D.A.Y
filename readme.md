@@ -1,156 +1,172 @@
+<div align="center">
+
+<img src="public/assets/favicon.svg" alt="MONDAY logo" width="64" height="64" />
+
 # M.O.N.D.A.Y.
 
-**Motion-Operated Navigation, Design & Analysis sYstem.**
+**Your hands. Your model. Your workspace.**
 
-_The future of 3D interaction is in your hands._
+Motion-Operated Navigation, Design & Analysis sYstem.
 
-An open-source spatial workspace for exploring 3D models with an ordinary webcam. Import a model, inspect its components, and use deliberate hand gestures to rotate, move, and zoom. Everything runs in your browser.
+An open-source spatial workspace that puts 3D models at your fingertips.<br />
+Import an assembly. Explore its parts. Move it with your hands.
 
-![MONDAY workspace, captured from the running application](docs/workspace.png)
+**3D in your browser · Webcam gestures · Local processing · MIT licensed**
 
-## In the workspace
+[Get started](#get-started) · [Take a look](#take-a-look) · [Model formats](#bring-your-own-model) · [Gesture controls](#put-your-hands-to-work) · [Documentation](#under-the-hood)
 
-- Real GLB and GLTF import, local dependency resolution, drag and drop, uniform normalization, automatic framing, and material preservation.
-- An original, MIT-licensed orbital drive with 80 named meshes, 26,100 triangles, and a prepared exploded view.
-- MediaPipe Hand Landmarker detects up to two hands with 21 landmarks each. Processing runs in a worker where supported, with a scheduled main-thread fallback.
-- A pure TypeScript gesture state machine with temporal entry gates, pinch hysteresis, smoothing, conflict arbitration, discontinuity rejection, and immediate disengagement.
-- Scene hierarchy, component search, real metadata, visibility toggles, selection bounds, wireframe, model statistics, camera framing, and full reset.
-- Light/dark themes with a saved preference, retractable scene explorer, and focus mode (F) that keeps the camera preview visible.
-- Adaptive hand-position filtering, render-frame gesture easing, smooth explosion transitions, and pinch feedback in the camera overlay.
-- Mouse and touch orbit/pan/zoom, keyboard shortcuts, a live camera preview with landmark overlay, gesture setup, and sensitivity controls.
-- No login, database, API key, model uploads, camera recording, analytics, or application backend.
+</div>
 
-This is a model viewer, not a CAD editor. Imported animation playback, mesh editing, measurement tools, and general-purpose exploded views are outside the current release.
+![MONDAY in dark mode: the orbital drive, scene hierarchy, component inspector, and gesture controls](docs/screenshots/workspace-dark.png)
 
-## Run locally
+<p align="center"><sub>The workspace, running in the browser. An original 80-part assembly. A new perspective on every detail.</sub></p>
 
-Use Node.js **22.12+** (Node 24 recommended) and npm.
+## A workspace that moves with you
+
+| Explore                                                                                                   | Manipulate                                                                                      | Make it yours                                                                                            |
+| --------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Import GLB and GLTF models. Search the hierarchy, toggle component visibility, and inspect real metadata. | Rotate with an open palm, move with a pinch, and zoom with two hands. Mouse and touch work too. | Switch between dark and light mode. Retract the inspector. Press **F** to focus on the model and camera. |
+
+Hand movement uses adaptive filtering and smooth transitions between tracking updates. Releasing a gesture stops manipulation. The included orbital drive also has a smoothly animated exploded view, so you can look inside the assembly.
+
+**No account. No API key. No model uploads.** Camera frames and imported files stay in your browser.
+
+## Get started
+
+Use **Node.js 22.12+** and npm. Node 24 is recommended.
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Open the URL printed by Vite. The application opens directly into the workspace; camera access begins only when you choose **Enable camera** or **Gestures**.
+Open the local URL printed by Vite. The demo model loads automatically. Drag to rotate, scroll to zoom, or choose **Enable camera** to try gestures.
 
-`npm ci` copies MediaPipe WASM assets from the pinned npm package and downloads the version 1 hand model from Google's model storage. Its SHA-256 is checked. These generated files are ignored by Git and self-hosted in production. Installation needs internet access; ordinary application operation makes no third-party runtime requests. To retry asset setup:
+Installation downloads and verifies the MediaPipe hand model and copies its runtime assets. After setup, the application serves its models, fonts, and tracking assets from the same origin. No environment variables or application backend are needed.
+
+## Bring your own model
+
+Click **Import model**, or drop your files into the workspace.
+
+| Format                   | What to select                                                                                                           |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| **`.glb` — recommended** | A self-contained GLB file, with geometry, materials, and textures packaged together.                                     |
+| **`.gltf`**              | One GLTF file **plus all of its referenced `.bin` files and PNG, JPEG, or WebP textures**. Select or drop them together. |
+
+**Limits:** 50 MiB per file, 100 MiB total, up to 128 files. Additional geometry and texture limits are listed in the [platform reference](docs/reference.md#supported-files).
+
+OBJ, STL, FBX, Blender files, and ZIP archives cannot be imported directly. Export an **uncompressed GLB** from your modeling tool first. Draco, Meshopt, and KTX2 compression are not supported. Imported models are displayed as static geometry; animation playback and mesh editing are not included.
+
+## Take a look
+
+### Every part, in perspective
+
+Separate the demo assembly with the **Exploded view** slider. Orbit around the housing, gears, fasteners, and hub, then bring everything back together.
+
+![Exploded orbital-drive assembly showing separated gears, mounting hardware, and housing in the dark workspace](docs/screenshots/exploded-assembly.png)
+
+_The original demo includes authored separation paths. Arbitrary imported models do not automatically gain an exploded view._
+
+### Light on the interface. Close on the details.
+
+Use the sun/moon button to change the entire workspace, including the 3D background and grid. Select a component to inspect its name, geometry, and file metadata. Your theme choice is remembered locally.
+
+![Light-mode workspace with the front mounting flange selected and its properties visible in the inspector](docs/screenshots/light-inspection.png)
+
+### Clear the stage
+
+Press **F**, or use the focus button in the top bar, to retract the inspector and keep the model and camera panel in view. The current orientation and relative zoom are preserved. The scene explorer also has its own retract button.
+
+![MONDAY focus mode with a rotated orbital drive, the full-width 3D stage, and camera controls](docs/screenshots/focus-mode.png)
+
+<table>
+<tr>
+<td width="35%" align="center">
+<img src="docs/screenshots/mobile-focus.png" alt="Light-mode focus workspace on a narrow mobile screen" width="300" />
+</td>
+<td>
+<h3>A smaller screen. The same workspace.</h3>
+<p>Touch controls, responsive framing, a retractable inspector, and light mode keep the model accessible on narrow screens.</p>
+<p>Desktop gives your hands more room for webcam gestures. A camera is optional for viewing and inspecting models.</p>
+<p><strong>All five screenshots show the running application and its bundled model.</strong> No interface mockups or generated product imagery.</p>
+</td>
+</tr>
+</table>
+
+## Put your hands to work
+
+Enable the camera, keep your whole hand in frame, and use **Gesture guide → Set up gesture controls** for a positioning check.
+
+| Your gesture                    | The response                                                    |
+| ------------------------------- | --------------------------------------------------------------- |
+| **Open palm**                   | Hold briefly, then move horizontally or vertically to rotate.   |
+| **Thumb–index pinch**           | Hold briefly, then drag to move the model in the viewing plane. |
+| **Two pinches**                 | Spread your hands to zoom in; bring them together to zoom out.  |
+| **Point with one index finger** | Aim the pointer at a component and dwell to select it.          |
+| **Relax or lower your hand**    | Stop manipulation.                                              |
+
+Tracking supports two hands, with 21 landmarks per hand. The preview is mirrored, with landmark and pinch feedback. Adjust **Sensitivity** and **Motion smoothing** in workspace settings.
+
+Two visible hands engage zoom only when both are pinching. Closing the camera preview keeps tracking active; **Escape turns the camera off immediately**. Gesture movement translates the whole model, while selection identifies a component for inspection.
+
+### Prefer a mouse?
+
+| Control                       | Action                                                        |
+| ----------------------------- | ------------------------------------------------------------- |
+| Left drag / one-finger touch  | Orbit in Rotate mode                                          |
+| Right drag / two-finger touch | Pan                                                           |
+| Wheel / touch pinch           | Zoom                                                          |
+| Click a mesh or hierarchy row | Select a component                                            |
+| **R / M / Z / I**             | Rotate / Move / Zoom / Inspect tool                           |
+| **F**                         | Enter or leave focus mode                                     |
+| **/**                         | Open the scene explorer and search components                 |
+| **0**                         | Reset the model, camera, visibility, wireframe, and explosion |
+| **?**                         | Open the gesture guide                                        |
+| **Escape**                    | Turn the camera off                                           |
+
+## Under the hood
+
+**React · TypeScript · Three.js · React Three Fiber · MediaPipe · Zustand · Vite**
+
+Hand detection runs in a worker where supported, with a scheduled main-thread fallback. Tracking data stays outside React; the render loop turns measured gesture changes into smooth model movement. The interface uses a local font, and the 3D scene uses locally generated studio lighting.
+
+| Read more                                  | What's inside                                                    |
+| ------------------------------------------ | ---------------------------------------------------------------- |
+| [Architecture](docs/architecture.md)       | Tracking, rendering, data flow, and resource ownership           |
+| [Gesture design](docs/gestures.md)         | Recognition rules, smoothing, arbitration, and release behavior  |
+| [Platform reference](docs/reference.md)    | File limits, project structure, browser requirements, and checks |
+| [Demo model](docs/demo-model.md)           | Original geometry, authored explosion paths, and MIT license     |
+| [Privacy](docs/privacy.md)                 | Camera and file handling                                         |
+| [Troubleshooting](docs/troubleshooting.md) | Camera, loading, and browser problems                            |
+| [Deployment](docs/deployment.md)           | Hosting the static application on Vercel                         |
+
+A current browser with WebGL 2 and WebAssembly is required. Camera access needs HTTPS or localhost. Real-world gesture quality depends on lighting, hand visibility, camera latency, and hardware; automated tests do not replace physical webcam testing.
+
+## Development
 
 ```sh
-npm run assets:tracking
+npm run test:unit       # Recognition, interaction, camera, and import checks
+npm run build           # Type-check and build the production app
+npm run test:e2e         # Browser acceptance tests
+npm run lint            # ESLint
 ```
 
-No environment variables are required. A fresh clone includes the demonstration GLB; regenerate it with `npm run assets:demo` if you modify its original procedural source.
+Browser checks use installed Google Chrome on macOS, or Playwright Chromium elsewhere. Install Chromium with `npx playwright install chromium` if needed.
 
-## Gesture reference
-
-Keep your whole hand in frame, in even light, about an arm's length from the camera. Use **Gesture guide → Set up gesture controls** for the interactive positioning check.
-
-| Gesture                                     | Action                                                    | Release                               |
-| ------------------------------------------- | --------------------------------------------------------- | ------------------------------------- |
-| One open palm                               | Hold briefly, then move horizontally/vertically to rotate | Relax your fingers or lower your hand |
-| One thumb–index pinch                       | Hold briefly, then move to translate in the viewing plane | Separate thumb and index              |
-| Two thumb–index pinches                     | Spread hands to zoom in; bring them together to zoom out  | Release either pinch                  |
-| Index finger extended, other fingers folded | Aim the projected pointer and dwell on a mesh to inspect  | Relax or lower your hand              |
-| Neutral pose or no hand                     | No transformations                                        | —                                     |
-
-Two visible hands suppress one-hand manipulation. Only two intentional pinches engage zoom. The preview is mirrored; pointer and movement coordinates are mirrored once to match it. Closing the preview leaves tracking active. **Escape** immediately stops camera tracks, including while a dialog is open.
-
-| Mouse / keyboard              | Action                                                    |
-| ----------------------------- | --------------------------------------------------------- |
-| Left drag / one-finger touch  | Orbit (Rotate mode)                                       |
-| Right drag / two-finger touch | Pan                                                       |
-| Wheel / touch pinch           | Zoom                                                      |
-| Move tool + left drag         | Pan camera                                                |
-| Zoom tool + left drag         | Dolly camera                                              |
-| Click a mesh or hierarchy row | Select a component                                        |
-| R / M / Z / I                 | Choose a mouse tool                                       |
-| 0                             | Reset model, camera, visibility, wireframe, and explosion |
-| F                             | Toggle focus mode; keep the object and camera visible     |
-| /                             | Open the scene explorer and search components             |
-| ?                             | Open guide                                                |
-| Escape                        | Turn camera off                                           |
-
-Gesture move translates the whole imported model. Selection identifies a component for inspection; it does not detach or drag individual parts.
-
-## Supported files
-
-Prefer a self-contained **GLB (GLTF 2.0)**. For **GLTF**, select or drop exactly one `.gltf` file together with every referenced `.bin`, PNG, JPEG, and WebP file. When file pickers flatten folders, dependency filenames must be unique. For ambiguous filenames or parent-relative paths, export a self-contained GLB. ZIP files and dropped directories are not unpacked.
-
-External HTTP/HTTPS, file, and parent-directory resource paths are blocked. Missing dependencies produce an actionable error while preserving the current model. Draco, Meshopt, and KTX2 compression are explicitly rejected; re-export uncompressed. Static geometry from animated models is viewable; animation playback is not provided.
-
-Limits: 50 MiB per file, 100 MiB total, 128 files, 512 meshes, 3,000 nodes, 2 million vertices, 1 million triangles, 8,192-pixel texture dimensions, and 64 megapixels of combined image data. Geometry memory and hierarchy limits are also checked. Image headers are inspected before decoding. These safeguards reduce risk; loading untrusted complex graphics can still stress a browser.
-
-Dimensions are reported in source model units. Part names and metadata come from the file; MONDAY does not infer part semantics. Only the prepared demo has authored explosion directions.
-
-## Stack and architecture
-
-React 19, strict TypeScript, Vite 8, Three.js, React Three Fiber, Drei, MediaPipe Tasks Vision, Tailwind CSS 4, Lucide React, and Zustand. Vitest, React Testing Library, Playwright, ESLint, and Prettier provide verification.
-
-```text
-src/
-  app/                       Workspace orchestration and keyboard/drop handling
-  components/                Camera preview, dialogs, shared controls, error boundary
-  engine/
-    camera/                  Permission requests, errors, stream cleanup
-    tracking/                MediaPipe initialization, worker, scheduler, live channel
-    gestures/                Framework-independent temporal gesture recognizer
-    interactions/            Camera-space intent → Three.js transforms and raycasting
-  features/
-    model-import/            Preflight, textures, GLTF resolution, normalization, disposal
-    model-viewer/            R3F scene, lighting, mouse controls, camera-linked gizmo
-    model-inspection/        Object hierarchy and metadata
-  stores/                    Low-frequency workspace state
-  styles/                    Design system and responsive layout
-  tests/                     Test setup and synthetic hand fixtures
-public/
-  models/                    Original demo GLB and its license
-  mediapipe/                 Generated, self-hosted runtime assets
-  licenses/                  Third-party license texts
-scripts/                     Asset generation and verified tracking setup
-tests/e2e/                   Production-browser acceptance tests
-docs/                        Architecture, gestures, QA, privacy, troubleshooting, deployment
-```
-
-Tracking frames live outside React. UI summaries update at roughly six times per second or on a gesture transition. The R3F frame loop consumes each intent once; gestures do not accumulate momentum. Read [architecture](docs/architecture.md) and [gesture design](docs/gestures.md).
-
-## Browser and hardware
-
-A current desktop browser with WebGL 2, WebAssembly, and camera APIs is required. HTTPS is required outside localhost. Desktop Chrome/Chromium is the automated browser target. Safari, Firefox, and Edge are intended targets but require their own release testing, particularly the worker fallback and camera permissions.
-
-A webcam is optional for viewing. A modern laptop, a well-lit face-on camera, and adequate space for two hands are recommended. Touch controls and a collapsible inspector support small screens; hand interaction is most practical on desktop. No constant frame-rate or hardware performance claim is made. Inference is capped at 30 starts/second in the worker and 24 on the main thread, with additional backoff based on inference cost, and adapts naturally to available decoded frames; the UI reports measured inference time and detection rate.
-
-## Privacy
-
-Files are read using browser File APIs and retained only in memory. Camera frames are processed locally and are never recorded or sent to a server. Tracks stop when disabled, on Escape, or when the app unmounts. Hidden tabs suspend inference; disabling the camera releases the device. Reloading loses the current import and gesture settings. The theme preference is saved locally.
-
-The hosting provider receives normal requests for application assets, not models or video. The build machine downloads npm packages and the fixed MediaPipe model. Runtime JavaScript, WASM, fonts, and the demo are served from the same origin. See [privacy and security](docs/privacy.md) and [third-party notices](THIRD_PARTY_NOTICES.md).
-
-## Quality checks
+### Refresh the screenshots
 
 ```sh
-npm run typecheck
-npm run lint
-npm run format:check
-npm run test:unit
-npm run build
-npx playwright install chromium
-npm run test:e2e
-# Or unit tests + production build + browser tests:
-npm test
+npm run docs:screenshots
 ```
 
-On macOS with Google Chrome installed, the browser tests use it; otherwise they use Playwright Chromium. Browser tests exercise the production build on port 4173. Tests may use synthetic landmarks, permission mocks, and Chromium's synthetic camera; production never uses them. The real MediaPipe runtime is exercised with the synthetic test camera. This does not replace physical hand-gesture testing. See [verification and manual acceptance](docs/testing.md) for the recorded results and remaining release checks.
+This builds the app, starts a temporary preview on port **4175**, and captures five real interface states into [`docs/screenshots`](docs/screenshots). The script shuts down its browser and preview server when finished. It does not enable the webcam. See the [capture script](scripts/capture-screenshots.mjs).
 
-## Deploy to Vercel
+## Contribute
 
-Push the repository to your Git host, import it into Vercel, and use the included `vercel.json`. Installation is `npm ci`, build is `npm run build`, and output is `dist`. Select Node 24. No environment variables, functions, database, or paid backend are required. [Deployment instructions](docs/deployment.md) include production checks and security headers.
+Read the [contribution guide](CONTRIBUTING.md), [code of conduct](CODE_OF_CONDUCT.md), and [security policy](SECURITY.md).
 
-## Limits and next steps
+Source code and the original orbital-drive model are [MIT licensed](LICENSE). Dependencies retain their own licenses; see [third-party notices](THIRD_PARTY_NOTICES.md).
 
-Gestures can be affected by lighting, occlusion, motion blur, hand orientation, and detector handedness changes. These cause safe disengagement and reacquisition. Initial tracking downloads are substantial (the hand model is about 7.8 MB plus WASM); the first camera start may take several seconds. Heavy GLTF parsing still happens on the main thread. Very slow inference is discarded to avoid applying stale movement.
+---
 
-Future work: physical usability studies across devices and hand shapes, worker-based model parsing, optional compressed-model decoders, camera device selection, and richer accessible model navigation. No component semantics, engineering accuracy, or universal tracking reliability is claimed.
-
-## Contribute and license
-
-Read [CONTRIBUTING](CONTRIBUTING.md), [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md), and [SECURITY](SECURITY.md). Source code and the original demonstration model are MIT licensed. Third-party dependencies retain their own licenses; see [LICENSE](LICENSE) and [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES.md).
+<p align="center"><strong>M.O.N.D.A.Y.</strong><br /><sub>The future of 3D interaction is in your hands.</sub></p>

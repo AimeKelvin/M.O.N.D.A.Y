@@ -24,7 +24,8 @@
     "postinstall": "node scripts/setup-tracking.mjs",
     "check": "npm run lint && npm run format:check && npm test",
     "start": "vite --host 127.0.0.1",
-    "test:unit": "vitest run"
+    "test:unit": "vitest run",
+    "docs:screenshots": "npm run build && node scripts/capture-screenshots.mjs"
   },
   "dependencies": {
     "@fontsource-variable/inter": "5.3.0",
